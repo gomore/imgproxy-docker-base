@@ -1,9 +1,8 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - "test/*"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*"
       - "test-[a-zA-Z0-9]+"
@@ -23,12 +22,12 @@ jobs:
         build:
           - arch: amd64
             dockerPlatform: linux/amd64
-            image: linux-5.0
+            image: macOS-arm64
           - arch: arm64
             dockerPlatform: linux/arm64/v8
-            image: arm-3.0
+            image: macOS-arm64
     runs-on:
-      - image:${{ matrix.build.image }}
+      group: ${{ matrix.build.image }}
     permissions:
       contents: read
       packages: write
@@ -52,6 +51,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          logout: true
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -84,6 +84,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          logout: true
 
       - name: Push manifests
         run: |
