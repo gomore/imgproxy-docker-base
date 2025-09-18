@@ -229,3 +229,9 @@ mkdir $DEPS_SRC/vips
 cd $DEPS_SRC/vips
 curl -Ls https://github.com/libvips/libvips/releases/download/v$VIPS_VERSION/vips-$VIPS_VERSION.tar.xz \
   | tar -xJC . --strip-components=1
+
+print_download_stage pdfium $PDFIUM_VERSION
+mkdir $DEPS_SRC/pdfium
+cd $DEPS_SRC/pdfium
+curl -Ls https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$PDFIUM_VERSION/pdfium-linux-x64.tgz \
+  | tar -xzC .
