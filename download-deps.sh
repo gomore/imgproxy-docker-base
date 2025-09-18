@@ -233,5 +233,19 @@ curl -Ls https://github.com/libvips/libvips/releases/download/v$VIPS_VERSION/vip
 print_download_stage pdfium $PDFIUM_VERSION
 mkdir $DEPS_SRC/pdfium
 cd $DEPS_SRC/pdfium
-curl -Ls https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$PDFIUM_VERSION/pdfium-linux-x64.tgz \
+case "$(uname -m)" in
+  x86_64)
+    ARCH=x64
+    ;;
+
+  aarch64)
+    ARCH=arm64
+    ;;
+
+  *)
+    echo "Unsupported architecture $(uname -m)"
+    exit 1
+    ;;
+esac
+curl -Ls https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F$PDFIUM_VERSION/pdfium-linux-$ARCH.tgz \
   | tar -xzC .

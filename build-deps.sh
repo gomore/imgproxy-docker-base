@@ -496,6 +496,20 @@ cd $DEPS_SRC/pdfium
 cp -r include/* $TARGET_PATH/include/
 cp lib/libpdfium.so $TARGET_PATH/lib/
 
+mkdir -p $TARGET_PATH/lib/pkgconfig
+cat > $TARGET_PATH/lib/pkgconfig/pdfium.pc << EOF
+prefix=$TARGET_PATH
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: pdfium
+Description: PDFium
+Version: $PDFIUM_VERSION
+Libs: -L\${libdir} -lpdfium
+Cflags: -I\${includedir}
+EOF
+
 print_build_stage vips $VIPS_VERSION
 cd $DEPS_SRC/vips
 CFLAGS="${CFLAGS} -O3" CXXFLAGS="${CXXFLAGS} -O3" \
