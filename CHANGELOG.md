@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- Add PDF support to libvips using pdfium binaries.
+
 ## [3.14.0] - 2025-09-17
 ### Added
 - Add PCRE2 10.40.

@@ -490,6 +490,26 @@ meson setup _build \
 ninja -C _build
 ninja -C _build install
 
+print_build_stage pdfium $PDFIUM_VERSION
+cd $DEPS_SRC/pdfium
+# Install pdfium headers and libraries
+cp -r include/* $TARGET_PATH/include/
+cp lib/libpdfium.so $TARGET_PATH/lib/
+
+mkdir -p $TARGET_PATH/lib/pkgconfig
+cat > $TARGET_PATH/lib/pkgconfig/pdfium.pc << EOF
+prefix=$TARGET_PATH
+exec_prefix=\${prefix}
+libdir=\${exec_prefix}/lib
+includedir=\${prefix}/include
+
+Name: pdfium
+Description: PDFium
+Version: $PDFIUM_VERSION
+Libs: -L\${libdir} -lpdfium
+Cflags: -I\${includedir}
+EOF
+
 print_build_stage vips $VIPS_VERSION
 cd $DEPS_SRC/vips
 CFLAGS="${CFLAGS} -O3" CXXFLAGS="${CXXFLAGS} -O3" \
@@ -501,7 +521,8 @@ meson setup _build \
   --libdir=lib \
   -Ddocs=false \
   -Dintrospection=disabled \
-  -Dmodules=disabled
+  -Dmodules=disabled \
+  -Dpdfium=enabled
 ninja -C _build
 ninja -C _build install
 rm -rf $TARGET_PATH/lib/libvips-cpp.*
